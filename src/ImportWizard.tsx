@@ -5,7 +5,7 @@ import Papa from "papaparse";
 import { Sorter } from "./sorter/Sorter";
 import { HeadersData } from "./types";
 
-type WizardState = "start" | "headerpicking" | "sorting";
+type WizardState = "start" | "header-picking" | "sorting";
 
 export const ImportWizard: React.FC = ({}) => {
     const [wizardState, setWizardState] = useState<WizardState>("start");
@@ -22,7 +22,7 @@ export const ImportWizard: React.FC = ({}) => {
                 header: true,
                 complete: (results) => {
                     setCSVData(results);
-                    setWizardState("headerpicking");
+                    setWizardState("header-picking");
                 },
             });
         },
@@ -33,7 +33,7 @@ export const ImportWizard: React.FC = ({}) => {
         return <ImportDrop onChange={onFileSelected} />;
     }
 
-    if (wizardState === "headerpicking") {
+    if (wizardState === "header-picking") {
         if (!CSVData) {
             return <b>Something is wrong, no file specified</b>;
         }

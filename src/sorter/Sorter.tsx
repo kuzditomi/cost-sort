@@ -6,7 +6,7 @@ import { HeadersData } from "../types";
 
 export const Sorter: React.FC<{
     costs: any[];
-    headersData: HeadersData
+    headersData: HeadersData;
 }> = ({ costs, headersData }) => {
     const [selectedCostIndex, setSelectedCostIndex] = useState(-1);
 
@@ -24,7 +24,7 @@ export const Sorter: React.FC<{
                 </div>
             );
         },
-        [headersData]
+        [headersData, selectedCostIndex, setSelectedCostIndex]
     );
 
     return (

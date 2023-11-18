@@ -30,6 +30,20 @@
 
         .cost-details {
             height: 50%;
+
+            .special-headers {
+                display: flex;
+                margin: 20px 0;
+
+                > div {
+                    width: 33%;
+                }
+
+                .amount,
+                .date {
+                    font-size: 200%;
+                }
+            }
         }
 
         .cost-category-picker {
