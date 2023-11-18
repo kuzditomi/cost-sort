@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import "./sorter.scss";
 import clsx from "clsx";
+import { CostEditor } from "./cost-editor";
 
 export const Sorter: React.FC<{
     costs: any[];
@@ -29,10 +30,17 @@ export const Sorter: React.FC<{
 
     return (
         <div>
-            <h3>Sorter</h3>
-
             <div className="sorter-container">
                 <div className="costs">{costs.map((cost, i) => renderCostRow(cost, i))}</div>
+                <CostEditor
+                    cost={costs[selectedCostIndex]}
+                    headersToDisplay={headers}
+                    next={() => {
+                        if (costs.length > selectedCostIndex + 1) {
+                            setSelectedCostIndex(selectedCostIndex + 1);
+                        }
+                    }}
+                />
             </div>
         </div>
     );

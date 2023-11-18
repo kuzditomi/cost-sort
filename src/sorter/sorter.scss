@@ -15,8 +15,29 @@
             overflow: hidden;
             cursor: pointer;
 
-            &.selected{
+            &.selected {
                 background-color: greenyellow;
+            }
+        }
+    }
+
+    .cost-editor {
+        width: 70%;
+        padding: 10px;
+        border: 1px solid black;
+        display: flex;
+        flex-direction: column;
+
+        .cost-details {
+            height: 50%;
+        }
+
+        .cost-category-picker {
+            height: 50%;
+
+            button {
+                font-size: x-large;
+                margin: 10px;
             }
         }
     }
