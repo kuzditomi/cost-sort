@@ -4,13 +4,15 @@ import { HeaderPicker } from "./header-picker/HeaderPicker";
 import Papa from "papaparse";
 import { Sorter } from "./sorter/Sorter";
 import { HeadersData } from "./types";
+import { Result } from "./result/Result";
 
-type WizardState = "start" | "header-picking" | "sorting";
+type WizardState = "start" | "header-picking" | "sorting" | "result";
 
 export const ImportWizard: React.FC = ({}) => {
     const [wizardState, setWizardState] = useState<WizardState>("start");
     const [CSVData, setCSVData] = useState<Papa.ParseResult<unknown> | null>(null);
     const [selectedHeadersData, setSelectedHeadersData] = useState<HeadersData | null>(null);
+    const [sortedResult, setSortedResult] = useState<any | null>(null);
 
     const onFileSelected = useCallback(
         (file: File) => {
@@ -54,7 +56,20 @@ export const ImportWizard: React.FC = ({}) => {
             return <p>something is wrong with selected headers</p>;
         }
 
-        return <Sorter costs={CSVData!.data} headersData={selectedHeadersData} />;
+        return (
+            <Sorter
+                costs={CSVData!.data}
+                headersData={selectedHeadersData}
+                onSorted={(result) => {
+                    setSortedResult(result);
+                    setWizardState("result");
+                }}
+            />
+        );
+    }
+
+    if (wizardState === "result") {
+        return <Result result={sortedResult} />;
     }
 
     return null;
