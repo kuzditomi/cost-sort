@@ -1,0 +1,23 @@
+.sorter-container {
+    display: flex;
+    flex-direction: row;
+
+    .costs {
+        width: 30%;
+        height: 600px;
+        overflow-y: auto;
+        text-align: left;
+        border: 1px solid black;
+
+        .cost-row {
+            text-overflow: ellipsis;
+            text-wrap: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+
+            &.selected{
+                background-color: greenyellow;
+            }
+        }
+    }
+}
