@@ -1,17 +1,15 @@
 import { useState } from "react";
 import "./header-picker.scss";
+import { HeadersData } from "../types";
 
 export const HeaderPicker: React.FC<{
-    csvData: Papa.ParseResult<unknown> | null;
-    onHeaderPicked: (headers: string[], dateHeader: string, nameHeader: string) => void;
+    csvData: Papa.ParseResult<unknown>;
+    onHeaderPicked: (headersData: HeadersData) => void;
 }> = ({ csvData, onHeaderPicked }) => {
     const [selectedHeaders, setSelectedHeaders] = useState<string[]>([]);
-    const [dateHeaderName, setDateHeaderName] = useState<string>("");
-    const [nameHeaderName, setNameHeaderName] = useState<string>("");
-
-    if (!csvData) {
-        return <b>Something is wrong, no file specified</b>;
-    }
+    const [dateHeader, setDateHeaderName] = useState<string>("");
+    const [nameHeader, setNameHeaderName] = useState<string>("");
+    const [amountHeader, setAmountHeaderName] = useState<string>("");
 
     return (
         <div className="header-picker">
@@ -37,16 +35,29 @@ export const HeaderPicker: React.FC<{
                             <div className="button-container">
                                 <button onClick={() => setDateHeaderName(header)}>date</button>
                                 <button onClick={() => setNameHeaderName(header)}>name</button>
+                                <button onClick={() => setAmountHeaderName(header)}>amount</button>
                             </div>
                         </li>
                     ))}
                 </ul>
                 <div>
-                    <p>date header: {dateHeaderName || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
-                    <p>name header: {nameHeaderName || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
+                    <p>date header: {dateHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
+                    <p>name header: {nameHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
+                    <p>amount header: {amountHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
                     <button
-                        disabled={selectedHeaders.length === 0 || !dateHeaderName || !nameHeaderName}
-                        onClick={() => onHeaderPicked(selectedHeaders, dateHeaderName, nameHeaderName)}
+                        disabled={
+                            selectedHeaders.length === 0 || !dateHeader || !nameHeader || !amountHeader
+                        }
+                        onClick={() =>
+                            onHeaderPicked({
+                                allHeadersToDisplay: selectedHeaders,
+                                specialHeaders: {
+                                    amountHeader,
+                                    nameHeader,
+                                    dateHeader,
+                                },
+                            })
+                        }
                     >
                         next
                     </button>

@@ -1,14 +1,13 @@
 import { useCallback, useState } from "react";
 import "./sorter.scss";
 import clsx from "clsx";
-import { CostEditor } from "./cost-editor";
+import { CostEditor } from "./CostEditor";
+import { HeadersData } from "../types";
 
 export const Sorter: React.FC<{
     costs: any[];
-    headers: string[];
-    dateHeader: string;
-    nameHeader: string;
-}> = ({ costs, headers, dateHeader, nameHeader }) => {
+    headersData: HeadersData
+}> = ({ costs, headersData }) => {
     const [selectedCostIndex, setSelectedCostIndex] = useState(-1);
 
     const renderCostRow = useCallback(
@@ -21,11 +20,11 @@ export const Sorter: React.FC<{
                         setSelectedCostIndex(index);
                     }}
                 >
-                    {cost[dateHeader]} - {cost[nameHeader]}
+                    {cost[headersData.specialHeaders.dateHeader]} - {cost[headersData.specialHeaders.nameHeader]}
                 </div>
             );
         },
-        [headers, selectedCostIndex]
+        [headersData]
     );
 
     return (
@@ -34,7 +33,7 @@ export const Sorter: React.FC<{
                 <div className="costs">{costs.map((cost, i) => renderCostRow(cost, i))}</div>
                 <CostEditor
                     cost={costs[selectedCostIndex]}
-                    headersToDisplay={headers}
+                    headersData={headersData}
                     next={() => {
                         if (costs.length > selectedCostIndex + 1) {
                             setSelectedCostIndex(selectedCostIndex + 1);

@@ -1,10 +1,11 @@
-import { CostCategoryPicker } from "./cost-category-picket";
+import { CostCategoryPicker } from "./CostCategoryPicker";
+import { HeadersData, SpecialHeaders } from "../types";
 
 export const CostEditor: React.FC<{
-    headersToDisplay: string[];
+    headersData: HeadersData;
     cost: any;
     next: () => void;
-}> = ({ cost, headersToDisplay, next }) => {
+}> = ({ cost, headersData, next }) => {
     if (!cost) {
         return null;
     }
@@ -12,7 +13,7 @@ export const CostEditor: React.FC<{
     return (
         <div className="cost-editor">
             <div className="cost-details">
-                {headersToDisplay.map((header) => (
+                {headersData.allHeadersToDisplay.map((header) => (
                     <div key={header}>
                         <b>{header}</b>: {cost[header]}
                     </div>
