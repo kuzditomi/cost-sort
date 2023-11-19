@@ -1,19 +1,20 @@
 import { useCallback, useState } from "react";
 import "./sorter.scss";
 import clsx from "clsx";
-import { Cost, HeadersData, SortResult, SortResultEntry } from "../types";
 import { CostDetails } from "./CostDetails";
 import { CostCategoryPicker } from "./CostCategoryPicker";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { headersDataSelector } from "../header-picker/header-picker.state";
+import { categorizedIndexesAtom } from "./sorter.state";
+import { costsState } from "../import-drop/import-drop.state";
 
-export const Sorter: React.FC<{
-    costs: Cost[];
-    headersData: HeadersData;
-    onSorted: (result: SortResult) => void;
-}> = ({ costs, headersData, onSorted }) => {
+export const Sorter: React.FC = () => {
     const [selectedCostIndex, setSelectedCostIndex] = useState(-1);
-    const [categorizedIndexes, setCategorizedIndexes] = useState<Map<number, string>>(new Map());
+    const [categorizedIndexes, setCategorizedIndexes] = useRecoilState(categorizedIndexesAtom);
 
+    const costs = useRecoilValue(costsState);
     const selectedCost = costs[selectedCostIndex];
+    const selectedHeaderData = useRecoilValue(headersDataSelector);
 
     const next = useCallback(() => {
         if (costs.length > selectedCostIndex + 1) {
@@ -34,8 +35,8 @@ export const Sorter: React.FC<{
                             }}
                         >
                             <div className="label">
-                                {cost[headersData.specialHeaders.dateHeader]} -{" "}
-                                {cost[headersData.specialHeaders.nameHeader]}
+                                {cost[selectedHeaderData.specialHeaders.dateHeader]} -{" "}
+                                {cost[selectedHeaderData.specialHeaders.nameHeader]}
                             </div>
                             <div className="badges">{categorizedIndexes.has(index) ? "✓" : null}</div>
                         </div>
@@ -44,7 +45,7 @@ export const Sorter: React.FC<{
                 <div className="cost-editor">
                     {selectedCost ? (
                         <>
-                            <CostDetails cost={selectedCost} headersData={headersData} />
+                            <CostDetails cost={selectedCost} />
                             <CostCategoryPicker
                                 cost={selectedCost}
                                 onCategoryPick={(category) => {
@@ -52,6 +53,7 @@ export const Sorter: React.FC<{
                                     next();
                                 }}
                                 onIgnore={() => {
+                                    // mutation bad. hmmm
                                     categorizedIndexes.delete(selectedCostIndex);
                                     setCategorizedIndexes(categorizedIndexes);
                                     next();
@@ -64,22 +66,6 @@ export const Sorter: React.FC<{
                     ) : null}
                 </div>
             </div>
-            <button
-                onClick={() => {
-                    const result = Array.from(categorizedIndexes.entries()).map(([index, category]) => {
-                        return {
-                            name: costs[index][headersData.specialHeaders.nameHeader],
-                            date: costs[index][headersData.specialHeaders.dateHeader],
-                            amount: costs[index][headersData.specialHeaders.amountHeader],
-                            category,
-                        } as SortResultEntry;
-                    });
-
-                    onSorted({ entries: result });
-                }}
-            >
-                Next
-            </button>
         </div>
     );
 };

@@ -1,17 +1,19 @@
 import { format, parse } from "date-fns";
-import { HeadersData } from "../types";
 import { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { headersDataSelector } from "../header-picker/header-picker.state";
 
 export const CostDetails: React.FC<{
-    headersData: HeadersData;
     cost: any;
-}> = ({ cost, headersData }) => {
-    const dateValue = cost[headersData.specialHeaders.dateHeader];
+}> = ({ cost }) => {
+    const selectedHeaderData = useRecoilValue(headersDataSelector);
     const [name, setName] = useState("");
+
     const nameInput = useRef<HTMLInputElement>(null);
+    const dateValue = cost[selectedHeaderData.specialHeaders.dateHeader];
 
     useEffect(() => {
-        setName(cost[headersData.specialHeaders.nameHeader]);
+        setName(cost[selectedHeaderData.specialHeaders.nameHeader]);
         if (nameInput.current) {
             nameInput.current.focus();
             setTimeout(() => {
@@ -26,7 +28,7 @@ export const CostDetails: React.FC<{
                 <div>
                     <div className="date">{format(parse(dateValue, "yyyymmdd", new Date()), "yyyy.mm.dd")}</div>
                     <div className="amount">
-                        <b>{cost[headersData.specialHeaders.amountHeader]}</b>
+                        <b>{cost[selectedHeaderData.specialHeaders.amountHeader]}</b>
                     </div>
                 </div>
                 <div className="name">
@@ -36,16 +38,16 @@ export const CostDetails: React.FC<{
                         value={name}
                         onChange={(e) => {
                             setName(e.target.value);
-                            
+
                             // mutation bad? hmmm
-                            cost[headersData.specialHeaders.nameHeader] = e.target.value;
+                            cost[selectedHeaderData.specialHeaders.nameHeader] = e.target.value;
                         }}
                     />
                 </div>
             </div>
             <div>
-                {headersData.allHeadersToDisplay
-                    .filter((header) => !Object.values(headersData.specialHeaders).includes(header))
+                {selectedHeaderData.allHeadersToDisplay
+                    .filter((header) => !Object.values(selectedHeaderData.specialHeaders).includes(header))
                     .map((header) => (
                         <div key={header}>
                             <b>{header}</b>: {cost[header]}

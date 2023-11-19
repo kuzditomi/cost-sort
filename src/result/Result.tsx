@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { addResultToClipboard, createTableFromResult } from "./resultToClipboard";
 import { SortResult } from "../types";
+import { useRecoilValue } from "recoil";
+import { sortedResultState } from "../sorter/sorter.state";
 
-export const Result: React.FC<{
-    result: SortResult;
-}> = ({ result }) => {
+export const Result: React.FC = () => {
+    const sortetResult = useRecoilValue(sortedResultState);
     const [hasCopied, setHasCopied] = useState(false);
 
-    if (!result) {
+    if (!sortetResult) {
         return <p>Something is wrong, there is no result.</p>;
     }
 
-    const resultHTML = createTableFromResult(result);
+    const resultHTML = createTableFromResult(sortetResult);
 
     return (
         <div className="result">
@@ -20,18 +21,21 @@ export const Result: React.FC<{
                 <textarea defaultValue={resultHTML}></textarea>
             </div>
             <div>
-                {hasCopied ? (
-                    <p>Copied to clipboard!</p>
-                ) : (
-                    <button
-                        onClick={() => {
-                            addResultToClipboard(resultHTML);
-                            setHasCopied(true);
-                        }}
-                    >
-                        Copy to clipboard
-                    </button>
-                )}
+                <button
+                    onClick={() => {
+                        addResultToClipboard(resultHTML);
+                        setHasCopied(true);
+
+                        setTimeout(() => {
+                            if (setHasCopied) {
+                                setHasCopied(false);
+                            }
+                        }, 1500);
+                    }}
+                >
+                    Copy to clipboard
+                </button>
+                {hasCopied ? <span>Copied to clipboard!</span> : null}
             </div>
         </div>
     );

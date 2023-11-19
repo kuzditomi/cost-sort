@@ -1,13 +1,15 @@
-import { useState } from "react";
 import "./App.scss";
-import { ImportWizard } from "./ImportWizard";
+import { ImportWizard } from "./import-wizard/ImportWizard";
+import { RecoilRoot } from "recoil";
 
 function App() {
     return (
-        <div className="App">
-            <h1>hello, let's sort some cost!</h1>
-            <ImportWizard />
-        </div>
+        <RecoilRoot>
+            <div className="App">
+                <h1>hello, let's sort some cost!</h1>
+                <ImportWizard />
+            </div>
+        </RecoilRoot>
     );
 }
 

@@ -1,15 +1,15 @@
-import { useState } from "react";
 import "./header-picker.scss";
-import { HeadersData } from "../types";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { amountHeaderAtom, dateHeaderAtom, nameHeaderAtom, selectedHeadersAtom } from "./header-picker.state";
+import { importedCSVDataState } from "../import-drop/import-drop.state";
 
-export const HeaderPicker: React.FC<{
-    csvData: Papa.ParseResult<unknown>;
-    onHeaderPicked: (headersData: HeadersData) => void;
-}> = ({ csvData, onHeaderPicked }) => {
-    const [selectedHeaders, setSelectedHeaders] = useState<string[]>([]);
-    const [dateHeader, setDateHeaderName] = useState<string>("");
-    const [nameHeader, setNameHeaderName] = useState<string>("");
-    const [amountHeader, setAmountHeaderName] = useState<string>("");
+export const HeaderPicker: React.FC = () => {
+    const [selectedHeaders, setSelectedHeaders] = useRecoilState(selectedHeadersAtom);
+    const [dateHeader, setDateHeaderName] = useRecoilState(dateHeaderAtom);
+    const [nameHeader, setNameHeaderName] = useRecoilState(nameHeaderAtom);
+    const [amountHeader, setAmountHeaderName] = useRecoilState(amountHeaderAtom);
+
+    const csvData = useRecoilValue(importedCSVDataState);
 
     return (
         <div className="header-picker">
@@ -65,21 +65,6 @@ export const HeaderPicker: React.FC<{
                     <p>date header: {dateHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
                     <p>name header: {nameHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
                     <p>amount header: {amountHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
-                    <button
-                        disabled={selectedHeaders.length === 0 || !dateHeader || !nameHeader || !amountHeader}
-                        onClick={() =>
-                            onHeaderPicked({
-                                allHeadersToDisplay: selectedHeaders,
-                                specialHeaders: {
-                                    amountHeader,
-                                    nameHeader,
-                                    dateHeader,
-                                },
-                            })
-                        }
-                    >
-                        next
-                    </button>
                 </div>
             </div>
         </div>
