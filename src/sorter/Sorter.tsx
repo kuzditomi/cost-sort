@@ -1,19 +1,19 @@
 import { useCallback, useState } from "react";
 import "./sorter.scss";
 import clsx from "clsx";
-import { HeadersData } from "../types";
+import { Cost, HeadersData, SortResult, SortResultEntry } from "../types";
 import { CostDetails } from "./CostDetails";
 import { CostCategoryPicker } from "./CostCategoryPicker";
 
 export const Sorter: React.FC<{
-    costs: any[];
+    costs: Cost[];
     headersData: HeadersData;
-    onSorted: (result:any) => void;
+    onSorted: (result: SortResult) => void;
 }> = ({ costs, headersData, onSorted }) => {
     const [selectedCostIndex, setSelectedCostIndex] = useState(-1);
     const [categorizedIndexes, setCategorizedIndexes] = useState<Map<number, string>>(new Map());
 
-    const cost = costs[selectedCostIndex];
+    const selectedCost = costs[selectedCostIndex];
 
     const next = useCallback(() => {
         if (costs.length > selectedCostIndex + 1) {
@@ -42,11 +42,11 @@ export const Sorter: React.FC<{
                     ))}
                 </div>
                 <div className="cost-editor">
-                    {cost ? (
+                    {selectedCost ? (
                         <>
-                            <CostDetails cost={cost} headersData={headersData} />
+                            <CostDetails cost={selectedCost} headersData={headersData} />
                             <CostCategoryPicker
-                                cost={cost}
+                                cost={selectedCost}
                                 onCategoryPick={(category) => {
                                     setCategorizedIndexes(categorizedIndexes.set(selectedCostIndex, category));
                                     next();
@@ -67,10 +67,15 @@ export const Sorter: React.FC<{
             <button
                 onClick={() => {
                     const result = Array.from(categorizedIndexes.entries()).map(([index, category]) => {
-                        return { cost: costs[index], category };
+                        return {
+                            name: costs[index][headersData.specialHeaders.nameHeader],
+                            date: costs[index][headersData.specialHeaders.dateHeader],
+                            amount: costs[index][headersData.specialHeaders.amountHeader],
+                            category,
+                        } as SortResultEntry;
                     });
 
-                    onSorted(result);
+                    onSorted({ entries: result });
                 }}
             >
                 Next

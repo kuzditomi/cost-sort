@@ -25,7 +25,7 @@ export const HeaderPicker: React.FC<{
                                     onChange={(evt) => {
                                         if (evt.target.checked) {
                                             setSelectedHeaders([...selectedHeaders, header]);
-                                        } else {
+                                        } else if (![dateHeader, nameHeader, amountHeader].includes(header)) {
                                             setSelectedHeaders(selectedHeaders.filter((h) => h != header));
                                         }
                                     }}
@@ -33,9 +33,30 @@ export const HeaderPicker: React.FC<{
                                 {header}
                             </label>
                             <div className="button-container">
-                                <button onClick={() => setDateHeaderName(header)}>date</button>
-                                <button onClick={() => setNameHeaderName(header)}>name</button>
-                                <button onClick={() => setAmountHeaderName(header)}>amount</button>
+                                <button
+                                    onClick={() => {
+                                        setDateHeaderName(header);
+                                        setSelectedHeaders([...selectedHeaders, header]);
+                                    }}
+                                >
+                                    date
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setNameHeaderName(header);
+                                        setSelectedHeaders([...selectedHeaders, header]);
+                                    }}
+                                >
+                                    name
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setAmountHeaderName(header);
+                                        setSelectedHeaders([...selectedHeaders, header]);
+                                    }}
+                                >
+                                    amount
+                                </button>
                             </div>
                         </li>
                     ))}
@@ -45,9 +66,7 @@ export const HeaderPicker: React.FC<{
                     <p>name header: {nameHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
                     <p>amount header: {amountHeader || <span style={{ color: "red" }}>PLEASE PICK</span>}</p>
                     <button
-                        disabled={
-                            selectedHeaders.length === 0 || !dateHeader || !nameHeader || !amountHeader
-                        }
+                        disabled={selectedHeaders.length === 0 || !dateHeader || !nameHeader || !amountHeader}
                         onClick={() =>
                             onHeaderPicked({
                                 allHeadersToDisplay: selectedHeaders,

@@ -3,14 +3,14 @@ import { ImportDrop } from "./import-drop/ImportDrop";
 import { HeaderPicker } from "./header-picker/HeaderPicker";
 import Papa from "papaparse";
 import { Sorter } from "./sorter/Sorter";
-import { HeadersData } from "./types";
+import { Cost, HeadersData } from "./types";
 import { Result } from "./result/Result";
 
 type WizardState = "start" | "header-picking" | "sorting" | "result";
 
 export const ImportWizard: React.FC = ({}) => {
     const [wizardState, setWizardState] = useState<WizardState>("start");
-    const [CSVData, setCSVData] = useState<Papa.ParseResult<unknown> | null>(null);
+    const [CSVData, setCSVData] = useState<Papa.ParseResult<Cost> | null>(null);
     const [selectedHeadersData, setSelectedHeadersData] = useState<HeadersData | null>(null);
     const [sortedResult, setSortedResult] = useState<any | null>(null);
 
@@ -20,7 +20,7 @@ export const ImportWizard: React.FC = ({}) => {
                 return;
             }
 
-            Papa.parse(file, {
+            Papa.parse<Cost>(file, {
                 header: true,
                 complete: (results) => {
                     setCSVData(results);
