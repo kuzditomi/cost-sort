@@ -46,12 +46,18 @@
                 margin: 20px 0;
 
                 > div {
-                    width: 33%;
+                    width: 50%;
                 }
 
                 .amount,
                 .date {
                     font-size: 200%;
+                }
+
+                .name input {
+                    width: 100%;
+                    box-sizing: border-box;
+                    font-size: 120%;
                 }
             }
         }
