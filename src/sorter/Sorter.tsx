@@ -45,7 +45,7 @@ export const Sorter: React.FC = () => {
                 <div className="cost-editor">
                     {selectedCost ? (
                         <>
-                            <CostDetails cost={selectedCost} />
+                            <CostDetails costIndex={selectedCostIndex} />
                             <CostCategoryPicker
                                 cost={selectedCost}
                                 onCategoryPick={(category) => {

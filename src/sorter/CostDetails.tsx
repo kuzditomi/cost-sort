@@ -1,26 +1,30 @@
 import { format, parse } from "date-fns";
 import { useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { headersDataSelector } from "../header-picker/header-picker.state";
+import { costsState } from "../import-drop/import-drop.state";
 
 export const CostDetails: React.FC<{
-    cost: any;
-}> = ({ cost }) => {
+    costIndex: number;
+}> = ({ costIndex }) => {
+    const [costs, setCosts] = useRecoilState(costsState);
+    const cost = costs[costIndex];
     const selectedHeaderData = useRecoilValue(headersDataSelector);
-    const [name, setName] = useState("");
 
+    const [name, setName] = useState("");
     const nameInput = useRef<HTMLInputElement>(null);
     const dateValue = cost[selectedHeaderData.specialHeaders.dateHeader];
 
     useEffect(() => {
         setName(cost[selectedHeaderData.specialHeaders.nameHeader]);
+
         if (nameInput.current) {
             nameInput.current.focus();
             setTimeout(() => {
                 if (nameInput.current) nameInput.current.setSelectionRange(0, nameInput.current.value.length);
             }, 200);
         }
-    }, [cost]);
+    }, [costIndex]);
 
     return (
         <div className="cost-details">
@@ -38,9 +42,16 @@ export const CostDetails: React.FC<{
                         value={name}
                         onChange={(e) => {
                             setName(e.target.value);
-
-                            // mutation bad? hmmm
-                            cost[selectedHeaderData.specialHeaders.nameHeader] = e.target.value;
+                        }}
+                        onBlur={()=>{
+                            const newcosts = [
+                                ...costs
+                            ];
+                            newcosts[costIndex] = {
+                                ...costs[costIndex],
+                                [selectedHeaderData.specialHeaders.nameHeader] : name
+                            };
+                            setCosts(newcosts);
                         }}
                     />
                 </div>
