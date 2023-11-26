@@ -2,12 +2,36 @@ import "./header-picker.scss";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { amountHeaderAtom, dateHeaderAtom, nameHeaderAtom, selectedHeadersAtom } from "./header-picker.state";
 import { importedCSVDataState } from "../import-drop/import-drop.state";
+import { useEffect } from "react";
+import clsx from "clsx";
 
 export const HeaderPicker: React.FC = () => {
     const [selectedHeaders, setSelectedHeaders] = useRecoilState(selectedHeadersAtom);
     const [dateHeader, setDateHeaderName] = useRecoilState(dateHeaderAtom);
     const [nameHeader, setNameHeaderName] = useRecoilState(nameHeaderAtom);
     const [amountHeader, setAmountHeaderName] = useRecoilState(amountHeaderAtom);
+
+    useEffect(() => {
+        // there are headers but nothing is selected yet
+        if (csvData.meta.fields?.length && !nameHeader && !dateHeader && !amountHeader) {
+            const newSelectedHeaders = [];
+
+            for (let header of csvData.meta.fields) {
+                if (header.toLowerCase().includes("name") || header.toLowerCase().includes("description")) {
+                    setNameHeaderName(header);
+                    newSelectedHeaders.push(header);
+                } else if (header.toLowerCase().includes("amount")) {
+                    setAmountHeaderName(header);
+                    newSelectedHeaders.push(header);
+                } else if (header.toLowerCase().includes("date")) {
+                    setDateHeaderName(header);
+                    newSelectedHeaders.push(header);
+                }
+            }
+
+            setSelectedHeaders([...selectedHeaders, ...newSelectedHeaders]);
+        }
+    }, []);
 
     const csvData = useRecoilValue(importedCSVDataState);
 
@@ -34,6 +58,7 @@ export const HeaderPicker: React.FC = () => {
                             </label>
                             <div className="button-container">
                                 <button
+                                    className={clsx(dateHeader === header && "active")}
                                     onClick={() => {
                                         setDateHeaderName(header);
                                         setSelectedHeaders([...selectedHeaders, header]);
@@ -42,6 +67,7 @@ export const HeaderPicker: React.FC = () => {
                                     date
                                 </button>
                                 <button
+                                    className={clsx(nameHeader === header && "active")}
                                     onClick={() => {
                                         setNameHeaderName(header);
                                         setSelectedHeaders([...selectedHeaders, header]);
@@ -50,6 +76,7 @@ export const HeaderPicker: React.FC = () => {
                                     name
                                 </button>
                                 <button
+                                    className={clsx(amountHeader === header && "active")}
                                     onClick={() => {
                                         setAmountHeaderName(header);
                                         setSelectedHeaders([...selectedHeaders, header]);

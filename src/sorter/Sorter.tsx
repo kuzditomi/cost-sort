@@ -17,7 +17,7 @@ export const Sorter: React.FC = () => {
     const selectedHeaderData = useRecoilValue(headersDataSelector);
 
     const next = useCallback(() => {
-        if (costs.length > selectedCostIndex + 1) {
+        if (costs.length > selectedCostIndex + 2) {
             setSelectedCostIndex(selectedCostIndex + 1);
         }
     }, [costs, selectedCostIndex, setSelectedCostIndex]);
