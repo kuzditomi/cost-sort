@@ -1,4 +1,5 @@
-const categories = ["food", "utilities", "fun"] as const;
+import { useRecoilValue } from "recoil";
+import { categoriesAtom } from "../category-settings/categories.state";
 
 export const CostCategoryPicker: React.FC<{
     cost: any;
@@ -6,6 +7,8 @@ export const CostCategoryPicker: React.FC<{
     onIgnore: () => void;
     onSelectAsIncome: () => void;
 }> = ({ cost, onCategoryPick, onIgnore, onSelectAsIncome }) => {
+    const categories = useRecoilValue(categoriesAtom);
+
     if (!cost) {
         return null;
     }

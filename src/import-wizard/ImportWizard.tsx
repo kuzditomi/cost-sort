@@ -7,6 +7,7 @@ import { WizardFrame } from "./WizardFrame";
 import { headersDataSelector } from "../header-picker/header-picker.state";
 import { useRecoilValue } from "recoil";
 import { importedCSVDataState } from "../import-drop/import-drop.state";
+import { CategorySettings } from "../category-settings/CategorySettings";
 
 type WizardState = "start" | "header-picking" | "sorting" | "result";
 
@@ -21,6 +22,7 @@ export const ImportWizard: React.FC = ({}) => {
     if (wizardState === "start") {
         return (
             <WizardFrame nextDisabled={!CSVData.data} onNext={changeState("header-picking")}>
+                <CategorySettings />
                 <ImportDrop />
             </WizardFrame>
         );
@@ -49,10 +51,7 @@ export const ImportWizard: React.FC = ({}) => {
 
     if (wizardState === "sorting") {
         return (
-            <WizardFrame
-                onNext={changeState("result")}
-                onPrev={changeState("header-picking")}
-            >
+            <WizardFrame onNext={changeState("result")} onPrev={changeState("header-picking")}>
                 <Sorter />
             </WizardFrame>
         );

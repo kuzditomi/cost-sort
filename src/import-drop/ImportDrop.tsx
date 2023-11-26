@@ -29,7 +29,7 @@ export const ImportDrop: React.FC = () => {
 
     return (
         <div>
-            <h3>Please drop a csv with headers</h3>
+            <h3>then drop a csv with headers</h3>
 
             <FileUploader handleChange={onFileSelected} name="file" types={fileTypes} classes="uploader" />
         </div>
