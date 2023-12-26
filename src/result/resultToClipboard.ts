@@ -1,8 +1,10 @@
 import { SortResult } from "../types";
 
-export const createTableFromResult = (result: SortResult): string => {
+export const createTableFromResult = (result: SortResult, dateTransformer: (date: string) => string): string => {
     const content = result.entries.map((entry) => {
-        const entryContent = `<td>${entry.date}</td><td>${entry.amount}</td><td>${entry.category}</td><td>${entry.name}</td>`;
+        const entryContent = `<td>${dateTransformer(entry.date)}</td><td>${entry.amount}</td><td>${
+            entry.category
+        }</td><td>${entry.name}</td>`;
 
         return `<tr>${entryContent}</tr>`;
     });

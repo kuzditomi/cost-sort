@@ -8,14 +8,17 @@ import { headersDataSelector } from "../header-picker/header-picker.state";
 import { useRecoilValue } from "recoil";
 import { importedCSVDataState } from "../import-drop/import-drop.state";
 import { CategorySettings } from "../category-settings/CategorySettings";
+import { DateFormat } from "../date-format/DateFormat";
+import { dateFormatsSelector } from "../date-format/data-format.state";
 
-type WizardState = "start" | "header-picking" | "sorting" | "result";
+type WizardState = "start" | "header-picking" | "date-format" | "sorting" | "result";
 
 export const ImportWizard: React.FC = ({}) => {
     const [wizardState, setWizardState] = useState<WizardState>("start");
 
     const selectedHeaderData = useRecoilValue(headersDataSelector);
     const CSVData = useRecoilValue(importedCSVDataState);
+    const [inputDateFormat, outputDateFormat] = useRecoilValue(dateFormatsSelector);
 
     const changeState = useCallback((state: WizardState) => () => setWizardState(state), [setWizardState]);
 
@@ -41,7 +44,7 @@ export const ImportWizard: React.FC = ({}) => {
         return (
             <WizardFrame
                 onPrev={changeState("start")}
-                onNext={changeState("sorting")}
+                onNext={changeState("date-format")}
                 nextDisabled={!canProgressFromHeaderPricker}
             >
                 <HeaderPicker />
@@ -49,9 +52,23 @@ export const ImportWizard: React.FC = ({}) => {
         );
     }
 
+    if (wizardState === "date-format") {
+        const canProgressFromDateFormat =inputDateFormat && outputDateFormat;
+
+        return (
+            <WizardFrame
+                onPrev={changeState("header-picking")}
+                onNext={changeState("sorting")}
+                nextDisabled={!canProgressFromDateFormat}
+            >
+                <DateFormat />
+            </WizardFrame>
+        );
+    }
+
     if (wizardState === "sorting") {
         return (
-            <WizardFrame onNext={changeState("result")} onPrev={changeState("header-picking")}>
+            <WizardFrame onNext={changeState("result")} onPrev={changeState("date-format")}>
                 <Sorter />
             </WizardFrame>
         );

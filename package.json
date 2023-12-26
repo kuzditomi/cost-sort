@@ -6,23 +6,30 @@
   "scripts": {
     "dev": "wite",
     "build": "tsc && wite build",
-    "preview": "wite preview"
+    "preview": "wite preview",
+    "test": "jest"
   },
   "dependencies": {
     "@types/papaparse": "^5.3.11",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
+    "jest-environment-jsdom": "^29.7.0",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-drag-drop-files": "^2.3.10",
-    "recoil": "^0.7.7"
+    "recoil": "^0.7.7",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.1.2",
+    "@types/jest": "^29.5.11",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@witejs/plugin-react": "^3.1.0",
+    "jest": "^29.7.0",
     "sass": "^1.69.5",
+    "ts-jest": "^29.1.1",
     "typescript": "^4.9.3",
     "wite": "^4.2.0"
   }

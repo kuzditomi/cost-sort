@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { headersDataSelector } from "../header-picker/header-picker.state";
 import { costsState } from "../import-drop/import-drop.state";
+import { useTransformDate } from "../date-format/useTransformDate";
 
 export const CostDetails: React.FC<{
     costIndex: number;
@@ -14,6 +15,8 @@ export const CostDetails: React.FC<{
     const [name, setName] = useState("");
     const nameInput = useRef<HTMLInputElement>(null);
     const dateValue = cost[selectedHeaderData.specialHeaders.dateHeader];
+
+    const transformDate = useTransformDate();
 
     useEffect(() => {
         setName(cost[selectedHeaderData.specialHeaders.nameHeader]);
@@ -30,7 +33,7 @@ export const CostDetails: React.FC<{
         <div className="cost-details">
             <div className="special-headers">
                 <div>
-                    <div className="date">{format(parse(dateValue, "yyyymmdd", new Date()), "yyyy.mm.dd")}</div>
+                    <div className="date">{transformDate(dateValue)}</div>
                     <div className="amount">
                         <b>{cost[selectedHeaderData.specialHeaders.amountHeader]}</b>
                     </div>
