@@ -7,7 +7,7 @@ export const inputDateFormatAtom = atom<string>({
 
 export const outputDateFormatAtom = atom<string>({
     key: "outputDateFormat",
-    default: "yyyy.mm.dd.",
+    default: "dd/mm/yyyy",
 });
 
 export const dateFormatsSelector = selector<[string, string]>({
