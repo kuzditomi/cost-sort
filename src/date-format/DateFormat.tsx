@@ -22,7 +22,7 @@ export const DateFormat: React.FC = () => {
     return (
         <div className="date-format">
             <div>
-                <h2>Input</h2>
+                <h2>Input <a href="https://devhints.io/datetime#momentjs-format" target="_blank" rel="nofollow noopener noreferrer">(format cheetsheat)</a></h2>
                 <h3>Example: {exampleDate}</h3>
                 <div>
                     <select>

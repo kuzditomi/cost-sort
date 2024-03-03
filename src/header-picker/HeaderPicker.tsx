@@ -1,6 +1,6 @@
 import "./header-picker.scss";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { amountHeaderAtom, dateHeaderAtom, nameHeaderAtom, selectedHeadersAtom } from "./header-picker.state";
+import { amountHeaderAtom, currencyHeaderAtom, dateHeaderAtom, nameHeaderAtom, selectedHeadersAtom } from "./header-picker.state";
 import { importedCSVDataState } from "../import-drop/import-drop.state";
 import { useEffect } from "react";
 import clsx from "clsx";
@@ -10,10 +10,11 @@ export const HeaderPicker: React.FC = () => {
     const [dateHeader, setDateHeaderName] = useRecoilState(dateHeaderAtom);
     const [nameHeader, setNameHeaderName] = useRecoilState(nameHeaderAtom);
     const [amountHeader, setAmountHeaderName] = useRecoilState(amountHeaderAtom);
+    const [currencyHeader, setCurrencyHeaderName] = useRecoilState(currencyHeaderAtom);
 
     useEffect(() => {
         // there are headers but nothing is selected yet
-        if (csvData.meta.fields?.length && !nameHeader && !dateHeader && !amountHeader) {
+        if (csvData.meta.fields?.length && !nameHeader && !dateHeader && !amountHeader && !currencyHeader ) {
             const newSelectedHeaders = [];
 
             for (let header of csvData.meta.fields) {
@@ -25,6 +26,9 @@ export const HeaderPicker: React.FC = () => {
                     newSelectedHeaders.push(header);
                 } else if (header.toLowerCase().includes("date")) {
                     setDateHeaderName(header);
+                    newSelectedHeaders.push(header);
+                } else if (header.toLowerCase().includes("currency")) {
+                    setCurrencyHeaderName(header);
                     newSelectedHeaders.push(header);
                 }
             }
@@ -49,7 +53,7 @@ export const HeaderPicker: React.FC = () => {
                                     onChange={(evt) => {
                                         if (evt.target.checked) {
                                             setSelectedHeaders([...selectedHeaders, header]);
-                                        } else if (![dateHeader, nameHeader, amountHeader].includes(header)) {
+                                        } else if (![dateHeader, nameHeader, amountHeader, currencyHeader].includes(header)) {
                                             setSelectedHeaders(selectedHeaders.filter((h) => h != header));
                                         }
                                     }}
@@ -83,6 +87,15 @@ export const HeaderPicker: React.FC = () => {
                                     }}
                                 >
                                     amount
+                                </button>
+                                <button
+                                    className={clsx(currencyHeader === header && "active")}
+                                    onClick={() => {
+                                        setCurrencyHeaderName(header);
+                                        setSelectedHeaders([...selectedHeaders, header]);
+                                    }}
+                                >
+                                    currency
                                 </button>
                             </div>
                         </li>

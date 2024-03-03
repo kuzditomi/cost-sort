@@ -3,6 +3,8 @@ import { SortResult, SortResultEntry } from "../types";
 import { headersDataSelector } from "../header-picker/header-picker.state";
 import { costsState } from "../import-drop/import-drop.state";
 
+export const exchangeRateHeader = 'CCexchangeRate';
+
 export const categorizedIndexesAtom = atom({
     key: "categorizedIndexes",
     default: new Map(),
@@ -19,6 +21,7 @@ export const sortedResultState = selector<SortResult>({
                 name: costs[index][selectedHeaderData.specialHeaders.nameHeader],
                 date: costs[index][selectedHeaderData.specialHeaders.dateHeader],
                 amount: costs[index][selectedHeaderData.specialHeaders.amountHeader],
+                currency: costs[index][selectedHeaderData.specialHeaders.amountHeader],
                 category,
             } as SortResultEntry;
         });

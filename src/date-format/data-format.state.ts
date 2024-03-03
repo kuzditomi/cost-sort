@@ -2,12 +2,12 @@ import { atom, selector } from "recoil";
 
 export const inputDateFormatAtom = atom<string>({
     key: "inputDateFormat",
-    default: "yyyymmdd",
+    default: "yyyyMMdd",
 });
 
 export const outputDateFormatAtom = atom<string>({
     key: "outputDateFormat",
-    default: "dd/mm/yyyy",
+    default: "dd/MM/yyyy",
 });
 
 export const dateFormatsSelector = selector<[string, string]>({

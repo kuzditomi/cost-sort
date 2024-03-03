@@ -7,6 +7,7 @@ export type SpecialHeaders = {
     amountHeader: string;
     nameHeader: string;
     dateHeader: string;
+    currencyHeader: string;
 };
 
 export type Cost = Record<keyof SpecialHeaders | string, string>;

@@ -21,6 +21,11 @@ export const amountHeaderAtom = atom({
     default: "",
 });
 
+export const currencyHeaderAtom = atom({
+    key: "currencyHeaderAtom",
+    default: "",
+});
+
 export const headersDataSelector = selector<HeadersData>({
     key: "headersData", // unique ID (with respect to other atoms/selectors)
     get: ({ get }) => {
@@ -28,10 +33,11 @@ export const headersDataSelector = selector<HeadersData>({
         const amountHeader = get(amountHeaderAtom);
         const nameHeader = get(nameHeaderAtom);
         const dateHeader = get(dateHeaderAtom);
+        const currencyHeader = get(currencyHeaderAtom);
 
         return {
             allHeadersToDisplay,
-            specialHeaders: { amountHeader, nameHeader, dateHeader },
+            specialHeaders: { amountHeader, nameHeader, dateHeader, currencyHeader },
         };
     },
 });
